@@ -40,7 +40,7 @@ module.exports = {
 
 	groups: {
 	  collection: 'group',
-	  via: 'owners'
+	  via: 'members'
 	},
 
 		toJSON: function(){
