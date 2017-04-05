@@ -12,21 +12,17 @@ module.exports = {
 			name:req.param('name')
 			}
 
-		Group.create(req.params.all(),function GroupCreated(err,group){
+		Group.create(groupObj,function GroupCreated(err,group){
 			if (err) {
 				console.log(err);
-				req.session.flash = {
-					err: err.ValidationError
-				}
-				return res.redirect('/');
+				return next(err);
 			}
-			group.owners.add(req.session.User.id);
-			group.save(function(err){
-                if(err){console.log(err);}
-            });
-
-
-			res.json(user);
+			//group.users.add( req.param('user_id') );
+			Member.create({user: req.param('user_id'), role: 'admin',group: group.id},function AdminGroupCreated(err,member){
+				if(err){console.log(err);}
+				res.json(group);
+			});
+			
 		});
 	},
 
