@@ -24,5 +24,9 @@ module.exports.policies = {
     'UsersController': {
         'create': true,
         'activation': true
+    },
+
+    'GroupsController': {
+        'create': true
     }
 };

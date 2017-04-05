@@ -13,20 +13,10 @@ module.exports = {
 			defaultsTo: 'none'
 		},
 		user: {
-			type: 'integer',
-			foreignKey: true,
-			references: 'users',
-			on: 'id',
-			onKey: 'id',
-			via: 'group'
+			model: 'user'
 		},
 		group: {
-			type: 'integer',
-			foreignKey: true,
-			references: 'groups',
-			on: 'id',
-			onKey: 'id',
-			via: 'user'
+			model: 'group'
 		}
 }
 };

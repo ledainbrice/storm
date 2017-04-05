@@ -13,10 +13,10 @@ module.exports = {
   		required: true
   	},
 
-  	members: {
+  	users: {
       collection: 'user',
-      via: 'groups',
-      dominant:true
+      via: 'group',
+      through: 'member'
     }
   }
 };
