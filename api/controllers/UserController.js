@@ -89,18 +89,24 @@ module.exports = {
 	},
 
 	login: function (req, res) {
+		var email = req.param('email');
+	    var password = req.param('password');
+
+	    if (!email || !password) {
+	     	return res.json(401, {err: 'email and password required'});
+	    }
 		User.findOne({email: req.param('email'),actived: true},function foundUser(err,user){
 			if(err) return next(err);
 			if(!user){
 				var noAccountError= [{name: 'noAccount', message: 'The email adress '+req.param('email')+' not found or inactived account.'}];
-				return res.json(401,{error: noAccountError});
+				return res.json(401,{err: noAccountError});
 			}
 
 			bcrypt.compare(req.param('password'),user.encryptedPassword,function(err,valid){
 				if(err) return next(err);
 				if(!valid){
 					var usernamepasswordMismatchError = [{name:'usernamePasswordMismatch',message:'Invalid username and password combination.'}];
-					return res.json(401,{error: usernamepasswordMismatchError});
+					return res.json(401,{err: usernamepasswordMismatchError});
 				}
 				
 				console.log('connection de '+user.id);
