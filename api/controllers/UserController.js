@@ -4,6 +4,7 @@
  * @description :: Server-side logic for managing users
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+const bcrypt = require('bcrypt');
 
 module.exports = {
 	
@@ -85,6 +86,29 @@ module.exports = {
 			});
 			return res.json({user:user});
 		});
-	}
+	},
+
+	login: function (req, res) {
+		User.findOne({email: req.param('email'),actived: true},function foundUser(err,user){
+			if(err) return next(err);
+			if(!user){
+				var noAccountError= [{name: 'noAccount', message: 'The email adress '+req.param('email')+' not found or inactived account.'}];
+				return res.json(401,{error: noAccountError});
+			}
+
+			bcrypt.compare(req.param('password'),user.encryptedPassword,function(err,valid){
+				if(err) return next(err);
+				if(!valid){
+					var usernamepasswordMismatchError = [{name:'usernamePasswordMismatch',message:'Invalid username and password combination.'}];
+					return res.json(401,{error: usernamepasswordMismatchError});
+				}
+				
+				console.log('connection de '+user.id);
+				
+				res.json(200, {user: user, token: jwToken.issue({id: user.id})});
+			});
+		});	    
+    }
+   
 };
 
