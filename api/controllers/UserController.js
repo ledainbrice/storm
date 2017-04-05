@@ -8,13 +8,16 @@
 module.exports = {
 	
 	create: function(req,res,next){
+		sails.log('Msg');
 		var userObj = {
 			name:req.param('name'),
 			email:req.param('email'),
 			password:req.param('password'),
-			confirmation:req.param('confirmation')
+			admin:false
 			}
+		
 		User.create(req.params.all(),function userCreated(err,user){
+			sails.log('Suite');
 			if (err) {
 				return res.json(err);
 			}
@@ -35,10 +38,7 @@ module.exports = {
 		//console.log(req.session);
 		User.find().exec( function foundUsers(err,users){
 			if (err) return next(err);
-			//if(!users) return next();
-			if(req.isSocket){
-				return res.json(users);
-			}
+			
 			return res.json({
 				users:users
 			});
