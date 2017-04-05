@@ -19,8 +19,25 @@ module.exports = {
 			}
 			//group.users.add( req.param('user_id') );
 			Member.create({user: req.param('user_id'), role: 'admin',group: group.id},function AdminGroupCreated(err,member){
-				if(err){console.log(err);}
-				res.json(group);
+				if(err){next(err);}
+				return res.json(group);
+			});
+			
+		});
+	},
+
+	invite: function(req,res,next){
+		var groupObj = {
+			name:req.param('name')
+			}
+
+		Group.findOne(req.param('id'),function Group(err,group){
+			if (err) {
+				return next(err);
+			}
+			Member.create({user: req.param('user_id'), role: 'invite',group: group.id},function InviteGroupCreated(err,member){
+				if(err){next(err);}
+				return res.json(group);
 			});
 			
 		});
