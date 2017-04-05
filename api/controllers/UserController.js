@@ -19,7 +19,7 @@ module.exports = {
 		User.create(req.params.all(),function userCreated(err,user){
 			sails.log('Suite');
 			if (err) {
-				return res.json(err);
+				return next(err);
 			}
 			
 			return res.json(user);
@@ -47,23 +47,26 @@ module.exports = {
 
 	'update': function (req,res,next){
 
-		if(req.session.User.admin){
-			var userObj = {
-				name:req.param('name'),
-				email:req.param('email'),
-				admin:req.param('admin')
-			}
-		}else{
-			var userObj = {
-				name:req.param('name'),
-				email:req.param('email')
-			}
-		}
 		User.update( req.param('id'), userObj, function userUpdated(err){
 			if (err) {
-				return res.redirect('/user/edit/'+req.param('id'));
+				next(err);
 			}
 			return res.redirect('/user/show/'+req.param('id'));
+		});
+	},
+
+	'activation': function(req,res,next){
+
+		User.findOne({activation: req.param('activation'),actived: false}).exec( function foundUser(err,user){
+			if (err) return next(err);
+
+			User.update( user.id, {activation: '', actived: true}, function userUpdated(err){
+				if (err) {
+					return next(err);
+				}
+				user.actived = true;
+				return res.json({user: user});
+			});
 		});
 	},
 
@@ -80,7 +83,7 @@ module.exports = {
 					return next(err);
 				}
 			});
-			return res.redirect('/user');
+			return res.json({user:user});
 		});
 	}
 };

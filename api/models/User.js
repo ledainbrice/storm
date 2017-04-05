@@ -5,7 +5,8 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
+const uuidV4 = require('uuid/v4');
 
 module.exports = {
 
@@ -43,6 +44,10 @@ module.exports = {
 		type: 'string'
 	},
 
+	activation: {
+		type: 'string'
+	},
+
 
 	groups: {
 	  collection: 'group',
@@ -52,6 +57,7 @@ module.exports = {
 		toJSON: function(){
 			var obj = this.toObject();
 			delete obj.encryptedPassword;
+			delete obj.activation;
 			delete obj._csrf;
 			
 			return obj;
@@ -78,6 +84,7 @@ module.exports = {
 			
 			if(err) return next(err);
 				values.encryptedPassword = hash;
+				values.activation = uuidV4();;
 				next();
 	  		})
 		})
