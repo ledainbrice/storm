@@ -33,6 +33,12 @@ module.exports = {
 	  defaultsTo: false
 	},
 
+	actived: {
+	  type: 'boolean',
+	  defaultsTo: false,
+	  boolean: true
+	},
+
 	encryptedpassword: {
 		type: 'string'
 	},

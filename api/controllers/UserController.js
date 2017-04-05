@@ -36,7 +36,7 @@ module.exports = {
 
 	'index': function (req,res,next){
 		//console.log(req.session);
-		User.find().exec( function foundUsers(err,users){
+		User.find({actived: true}).exec( function foundUsers(err,users){
 			if (err) return next(err);
 			
 			return res.json({
