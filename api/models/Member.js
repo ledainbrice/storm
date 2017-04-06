@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+	tableName: "users_groups",
 	attributes: {
 		role: {
 			type: 'string',

@@ -45,7 +45,7 @@ module.exports = {
 
 	'index': function (req,res,next){
 		//console.log(req.session);
-		Group.find().exec( function foundGroups(err,groups){
+		Group.find().populate('users').exec( function foundGroups(err,groups){
 			if (err) return next(err);
 			res.json({
 				groups:groups

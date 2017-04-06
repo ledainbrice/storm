@@ -19,15 +19,15 @@
 
 module.exports.policies = {
 
-     // Everything restricted here
+    '*': ['isAuthorized'], // Everything restricted here
   
-    'UsersController': {
-    	'*': ['isAuthorized'],
+    'UserController': {
+    	'login': true,
         'create': true,
         'activation': true
     },
 
-    'GroupsController': {
-        
+    'GroupController': {
+        '*': true
     }
 };
